@@ -7,7 +7,7 @@ const { authenticate } = require('../middlewares/auth');
 const { User, Order } = require('../models');
 
 // Create a new user
-router.post('/', async (req, res) => {
+router.post('/',authenticate, async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all users, including associated items
-router.get('/', async (req, res) => {
+router.get('/',authenticate, async (req, res) => {
   try {
     const users = await User.findAll(); // how can we include the ITEMS associated with the users in this response?
     res.json(users);
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get a specific user by ID, including associated items
-router.get('/:id', async (req, res) => {
+router.get('/:id',authenticate, async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id); // how can we include the ITEMS associated with the users in this response?
 
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a user by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id',authenticate, async (req, res) => {
   try {
     const [updated] = await User.update(req.body, {
       where: { id: req.params.id },
@@ -60,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a user by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',authenticate, async (req, res) => {
   try {
     const deleted = await User.destroy({
       where: { id: req.params.id },
@@ -78,18 +78,14 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/', authenticate, async (req, res) => {
   // Route implementation
+  try {
+    const user = await User.create(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating order', error });
+  }
 });
 
-router.get('/', authenticate, async (req, res) => {
-  // Route implementation
-});
 
-router.put('/', authenticate, async (req, res) => {
-  // Route implementation
-});
-
-router.delete('/', authenticate, async (req, res) => {
-  // Route implementation
-});
 
 module.exports = router;

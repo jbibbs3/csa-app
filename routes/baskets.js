@@ -4,10 +4,10 @@ const { authenticate } = require('../middlewares/auth');
 
 
 // Add your resource-specific routes here
-const { Basket, BasketItem, Item } = require('../models');
+const { Basket } = require('../models');
 
 // Create a new basket
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const basket = await Basket.create(req.body);
     res.status(201).json(basket);
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all baskets, including associated items
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const baskets = await Basket.findAll(); // how can we include the ITEMS associated with the baskets in this response?
     res.json(baskets);
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get a specific basket by ID, including associated items
-router.get('/:id', async (req, res) => {
+router.get('/:id',authenticate, async (req, res) => {
   try {
     const basket = await Basket.findByPk(req.params.id); // how can we include the ITEMS associated with the baskets in this response?
 
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a basket by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id',authenticate, async (req, res) => {
   try {
     const [updated] = await Basket.update(req.body, {
       where: { id: req.params.id },
@@ -60,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a basket by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     const deleted = await Basket.destroy({
       where: { id: req.params.id },
@@ -76,19 +76,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/', authenticate, async (req, res) => {
-  // Route implementation
-});
-
-router.get('/', authenticate, async (req, res) => {
-  // Route implementation
-});
-
-router.put('/', authenticate, async (req, res) => {
-  // Route implementation
-});
-
-router.delete('/', authenticate, async (req, res) => {
-  // Route implementation
-});
 module.exports = router;
