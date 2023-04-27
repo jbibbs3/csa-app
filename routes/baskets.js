@@ -14,6 +14,7 @@ router.post('/', authenticate, async (req, res) => {
       price: req.body.price
   }
   const basket = await Basket.create(newBasket);
+  res.status(201).json(basket)
   } catch (error) {
     res.status(500).json({ message: 'Error creating basket', error });
   }
