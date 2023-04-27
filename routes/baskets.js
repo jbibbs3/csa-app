@@ -9,8 +9,11 @@ const { Basket } = require('../models');
 // Create a new basket
 router.post('/', authenticate, async (req, res) => {
   try {
-    const basket = await Basket.create(req.body);
-    res.status(201).json(basket);
+    const newBasket = {
+      name: req.body.name, 
+      price: req.body.price
+  }
+  const basket = await Basket.create(newBasket);
   } catch (error) {
     res.status(500).json({ message: 'Error creating basket', error });
   }
