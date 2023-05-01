@@ -21,7 +21,7 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 // Get all baskets, including associated items
-router.get('/', authenticate, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const baskets = await Basket.findAll(); // how can we include the ITEMS associated with the baskets in this response?
     res.json(baskets);
@@ -31,7 +31,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // Get a specific basket by ID, including associated items
-router.get('/:id',authenticate, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const basket = await Basket.findByPk(req.params.id); // how can we include the ITEMS associated with the baskets in this response?
 
